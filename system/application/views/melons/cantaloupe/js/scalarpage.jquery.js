@@ -32,6 +32,8 @@
             containingPath: null,
             containingPathNodes: [],
             elementsWithIncrementedData: [],
+            mediaSlots: [],
+            mediaSlotsByResource: {},
             pathIndex: null,
             gallery: null,
             bodyCopyWidth: null,
@@ -411,6 +413,16 @@
                 link.addClass('texteo_icon');
                 link.addClass('texteo_icon_' + mediaelement.model.node.current.mediaSource.contentType);
 
+                // add texteo icons to media links that point to already instantiated media elements
+                $('.media_link').each(function() {
+                  if ($(this) != mediaelement.model.link) {
+                    if (mediaelement == $(this).data('mediaelement')) {
+                      $(this).addClass('texteo_icon');
+                      $(this).addClass('texteo_icon_' + mediaelement.model.node.current.mediaSource.contentType);
+                    }
+                  }
+                })
+
             },
 
             handleSetState: function(event, data) {
@@ -436,8 +448,8 @@
                             //$('.page').stop().fadeOut();
                             $('.page').addClass('fade_out');
                             /*$( '.page' ).addClass( 'fade_out' ).delay( 1000 ).queue( 'fx', function( next ) {
-                            	//$( this ).css( 'display', 'none' );
-                            	next();
+                                //$( this ).css( 'display', 'none' );
+                                next();
                             } );*/
                         }
                         $('body').css('overflow-y', 'hidden');
@@ -466,62 +478,78 @@
 
             addInlineNoteElementForLink: function(link) {
 
-            	link.wrap('<div class="inlineNoteBody body_copy"></div>');
-            	link.text('Go to note').attr('href', $('link#parent').attr('href')+link.attr('resource'));
-            	var wrapper = link.parent();
-            	var slug = link.attr('resource');
-            	var show = {title:false,description:false,content:true};
-            	if (link.data('show-title') == 'yes') show.title = true;
-            	if (link.data('show-description') == 'yes') show.description = true;
-            	if (link.data('show-content') != 'yes') show.content = false;
-            	var size = link.data('size');
-            	var wrap = link.data('text-wrap');
-            	var align = link.data('align');
-            	wrapper.addClass('size_'+size);
-            	switch (size) {
-            		case "small":
-            			wrapper.css('max-width', '350px');
-            			break;
-            		case "medium":
-            			wrapper.css('max-width', '550px');
-            			break;
-            	}
-            	if (wrap == 'wrap-text-around-media' && size != 'full') {
-            		wrapper.addClass('wrap');
-                	switch (align) {
-	            		case "right":
-	            			wrapper.css('float', 'right');
-	            			break;
-	            		default:
-	            			wrapper.css('float', 'left');
-	            	}
-            	}
-            	scalarapi.loadNode(slug, true, function(node) {
-            		for (uri in node) {
-            			var version_uri = node[uri]['http://purl.org/dc/terms/hasVersion'][0].value;
-            			var version = node[version_uri];
-            			if (show.content && 'undefined' != typeof(version['http://rdfs.org/sioc/ns#content'])) {
-            				var content = version['http://rdfs.org/sioc/ns#content'][0].value;
-            				wrapper.prepend('<div class="content">'+content+'</div>');
-            			};
-            			if (show.description && 'undefined' != typeof(version['http://purl.org/dc/terms/description'])) {
-            				var description = version['http://purl.org/dc/terms/description'][0].value;
-            				wrapper.prepend('<div class="description">'+description+'</div>');
-            			};
-            			if (show.title && 'undefined' != typeof(version['http://purl.org/dc/terms/title'])) {
-            				var title = version['http://purl.org/dc/terms/title'][0].value;
-            				wrapper.prepend('<div class="title">'+title+'</div>');
-            			};
-            			break;
-            		}
-            	});
+                link.wrap('<div class="inlineNoteBody body_copy"></div>');
+                link.text('Go to note').attr('href', $('link#parent').attr('href')+link.attr('resource'));
+                var wrapper = link.parent();
+                var slug = link.attr('resource');
+                var show = {title:false,description:false,content:true};
+                if (link.data('show-title') == 'yes') show.title = true;
+                if (link.data('show-description') == 'yes') show.description = true;
+                if (link.data('show-content') != 'yes') show.content = false;
+                var size = link.data('size');
+                var wrap = link.data('text-wrap');
+                var align = link.data('align');
+                wrapper.addClass('size_'+size);
+                switch (size) {
+                    case "small":
+                        wrapper.css('max-width', '350px');
+                        break;
+                    case "medium":
+                        wrapper.css('max-width', '550px');
+                        break;
+                }
+                if (wrap == 'wrap-text-around-media' && size != 'full') {
+                    wrapper.addClass('wrap');
+                    switch (align) {
+                        case "right":
+                            wrapper.css('float', 'right');
+                            break;
+                        default:
+                            wrapper.css('float', 'left');
+                    }
+                }
+                scalarapi.loadNode(slug, true, function(node) {
+                    for (uri in node) {
+                        var version_uri = node[uri]['http://purl.org/dc/terms/hasVersion'][0].value;
+                        var version = node[version_uri];
+                        if (show.content && 'undefined' != typeof(version['http://rdfs.org/sioc/ns#content'])) {
+                            var content = version['http://rdfs.org/sioc/ns#content'][0].value;
+                            wrapper.prepend('<div class="content">'+content+'</div>');
+                        };
+                        if (show.description && 'undefined' != typeof(version['http://purl.org/dc/terms/description'])) {
+                            var description = version['http://purl.org/dc/terms/description'][0].value;
+                            wrapper.prepend('<div class="description">'+description+'</div>');
+                        };
+                        if (show.title && 'undefined' != typeof(version['http://purl.org/dc/terms/title'])) {
+                            var title = version['http://purl.org/dc/terms/title'][0].value;
+                            wrapper.prepend('<div class="title">'+title+'</div>');
+                        };
+                        break;
+                    }
+                });
             },
 
             addMediaElementForLink: function(link, parent, height, baseOptions) {
 
-                var inline = link.hasClass('inline'),
-                    size = link.attr('data-size'),
-                    align = link.attr('data-align');
+              var inline = link.hasClass('inline'),
+                  size = link.attr('data-size'),
+                  align = link.attr('data-align'),
+                  resource = link.attr('resource'),
+                  usePrior = link.attr('data-use-prior') == 'true',
+                  alreadyAdded = page.mediaSlots.indexOf(resource) != -1;
+
+              var currentNode = scalarapi.model.getCurrentPageNode();
+              var options = {
+                  url_attributes: ['href', 'src'],
+                  autoplay: link.attr('data-autoplay') == 'true',
+                  solo: link.attr('data-caption') == 'none',
+                  getRelated: (typeof currentNode !== 'undefined' && $('[resource="' + currentNode.url + '"][typeof="scalar:Media"]').length > 0), // only get related content if this is a media page
+                  typeLimits: typeLimits
+              };
+              $.extend(options, baseOptions);
+
+              if (inline || !usePrior || (usePrior && !alreadyAdded)) {
+                page.mediaSlots.push(resource);
 
                 // default alignment is 'right'
                 if (align == undefined) {
@@ -532,7 +560,7 @@
                 if (page.adaptiveMedia == 'mobile') {
                     size = 'full';
 
-                    // default size is 'medium'
+                // default size is 'medium'
                 } else if (size == undefined) {
                     size = 'medium';
                 }
@@ -559,16 +587,6 @@
                   width = page.bodyCopyWidth;
                 }
 
-                var currentNode = scalarapi.model.getCurrentPageNode();
-                var options = {
-                    url_attributes: ['href', 'src'],
-                    autoplay: link.attr('data-autoplay') == 'true',
-                    solo: link.attr('data-caption') == 'none',
-                    getRelated: (typeof currentNode !== 'undefined' && $('[resource="' + currentNode.url + '"][typeof="scalar:Media"]').length > 0), // only get related content if this is a media page
-                    typeLimits: typeLimits
-                };
-                $.extend(options, baseOptions);
-
                 // media at 'full' size get a maximum height
                 if (size == 'full' || size == 'native') {
                     if (height == null) {
@@ -580,10 +598,11 @@
                 options.size = size;
 
                 // create the slot where the media will be added
-                slot = link.slotmanager_create_slot(width, height, options);
+                slot = link.slotmanager_create_slot(width, height, options, true);
 
                 // slot was successfully created
                 if (slot) {
+                    page.mediaSlotsByResource[resource] = slot;
 
                     // hide the media element until we get it fully set up (after its metadata has loaded)
                     slotDOMElement = slot.data('slot');
@@ -632,11 +651,11 @@
                     } else if (size != 'full') {
 
                         // put the media before its linking text, and align it appropriately
-                    	if (parent.prevAll('.acc').length) {  // an assist to some custom JS ~Craig
-                    		parent.prevAll('.acc').eq(0).before(slotDOMElement);
-                    	} else {
-                    		parent.before(slotDOMElement);
-                    	};
+                        if (parent.prevAll('.acc').length) {  // an assist to some custom JS ~Craig
+                            parent.prevAll('.acc').eq(0).before(slotDOMElement);
+                        } else {
+                            parent.before(slotDOMElement);
+                        };
                         slotDOMElement.addClass(align);
 
                         // if this is the top-most linked media, then align it with the top of its paragraph
@@ -657,6 +676,11 @@
 
                     return slot.data('mediaelement');
                 }
+              } else {
+                slot = link.slotmanager_create_slot(0, 0, options, false);
+                var mediaelement = page.mediaSlotsByResource[resource].data('mediaelement');
+                link.data('mediaelement', mediaelement);
+              }
 
             },
 
@@ -751,7 +775,7 @@
                             contextButton.addClass('multi');
                         }
                         if (page.usingHypothesis) {
-                        	contextButton.addClass('hypothesis_active');
+                            contextButton.addClass('hypothesis_active');
                         }
                         contextButton.popover({
                             trigger: "click",
@@ -826,52 +850,52 @@
 
             addPathButton: function(direction, destinationNode, pathNode, isEndOfPath) {
                 if ($('#margin_nav').length) {
-                	var prefix;
-                	var popooverPlacement;
-                	var pathVar;
-                	var content;
-                	switch (direction) {
+                    var prefix;
+                    var popooverPlacement;
+                    var pathVar;
+                    var content;
+                    switch (direction) {
 
-                		case "up":
-                		prefix = "Up to";
-                		popooverPlacement = "bottom";
-                		pathVar = '';
-                		break;
+                        case "up":
+                        prefix = "Up to";
+                        popooverPlacement = "bottom";
+                        pathVar = '';
+                        break;
 
-                		case "down":
-                		prefix = "Begin with";
-                		popooverPlacement = "top";
-                		pathVar = "?path=" + pathNode.slug;
-                		break;
+                        case "down":
+                        prefix = "Begin with";
+                        popooverPlacement = "top";
+                        pathVar = "?path=" + pathNode.slug;
+                        break;
 
-                		case "left":
-                		prefix = "Back to";
-                		popooverPlacement = "right";
-                		pathVar = "?path=" + pathNode.slug;
-                		break;
+                        case "left":
+                        prefix = "Back to";
+                        popooverPlacement = "right";
+                        pathVar = "?path=" + pathNode.slug;
+                        break;
 
-                		case "right":
+                        case "right":
                         if (!isEndOfPath) {
                             prefix = "Continue to";
                         } else {
                             prefix = "End of path <b>\"" + pathNode.getDisplayTitle() + "\"</b>; Continue to";
                         }
-                		popooverPlacement = "left";
-                		pathVar = "?path=" + pathNode.slug;
-                		break;
+                        popooverPlacement = "left";
+                        pathVar = "?path=" + pathNode.slug;
+                        break;
 
-                	}
-                	content = prefix + ' <b>"' + destinationNode.getDisplayTitle() + '"</b>';
-                	var thumbnailURL = destinationNode.getAbsoluteThumbnailURL();
-                	if (thumbnailURL != null) {
-                		content = '<img class="thumbnail" height="120" src=\"' + thumbnailURL + '\" alt=\"Thumbnail image of destination content\"/><br>' + content;
-                	}
+                    }
+                    content = prefix + ' <b>"' + destinationNode.getDisplayTitle() + '"</b>';
+                    var thumbnailURL = destinationNode.getAbsoluteThumbnailURL();
+                    if (thumbnailURL != null) {
+                        content = '<img class="thumbnail" height="120" src=\"' + thumbnailURL + '\" alt=\"Thumbnail image of destination content\"/><br>' + content;
+                    }
                     var arrow = $('<a class="path-nav ' + direction + '" data-toggle="popover" data-placement="' + popooverPlacement + '" href="' + destinationNode.url + pathVar + '"><img src="' + page.options.root_url + '/images/arrow_' + direction + '@2x.png" alt="' + direction + ' arrow"/></a>').insertBefore($('nav'));
-                	arrow.popover({
-                		trigger: "hover click",
-                		html: true,
-                		content: content,
-                		template: '<div class="popover caption_font path-nav-popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>' });
+                    arrow.popover({
+                        trigger: "hover click",
+                        html: true,
+                        content: content,
+                        template: '<div class="popover caption_font path-nav-popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>' });
                 }
             },
 
@@ -936,7 +960,7 @@
 
                     //page.addPathButton('up', page.containingPath, page.containingPath);
 
-					if (page.containingPathNodes.length > 1) {
+                    if (page.containingPathNodes.length > 1) {
                         if (page.containingPathIndex < (page.containingPathNodes.length - 1)) {
 
                             // This option is on the current path or we don't know what path we're on
@@ -957,8 +981,8 @@
                                 if (pathOptionCount == 0) {
                                     continue_button.addClass('primary');
                                 }
-                          		var nextNodeOnPath = page.containingPathNodes[page.containingPathIndex + 1];
-                          		page.addPathButton('right', nextNodeOnPath, page.containingPath);
+                                var nextNodeOnPath = page.containingPathNodes[page.containingPathIndex + 1];
+                                page.addPathButton('right', nextNodeOnPath, page.containingPath);
 
                                 // back button
                                 if (page.containingPathIndex > 0) {
@@ -974,8 +998,8 @@
                             section.append('<p><a id="back-btn" class="nav_btn" href="' + page.containingPathNodes[page.containingPathIndex - 1].url + '?path=' + page.containingPath.slug + '">&laquo; Back to &ldquo;' + page.containingPathNodes[page.containingPathIndex - 1].getDisplayTitle() + '&rdquo;</a></p>');
                         }
                         if (page.containingPathIndex > 0) {
-                        	var prevNodeOnPath = page.containingPathNodes[page.containingPathIndex - 1];
-                        	page.addPathButton('left', prevNodeOnPath, page.containingPath);
+                            var prevNodeOnPath = page.containingPathNodes[page.containingPathIndex - 1];
+                            page.addPathButton('left', prevNodeOnPath, page.containingPath);
                         }
                     }
                     if (section.children().length > 0) {
@@ -1154,9 +1178,9 @@
                     };
                     var hasReferences = $(".has_reference");
                     if (hasReferences.children().length > 0) {
-                    	var is_composite = (-1 == $('link#primary_role').attr('href').indexOf('Media')) ? true : false;
-                    	hasReferences.siblings('h1').text('This ' + selfType + ' is '+((is_composite)?'a note in':'referenced by')+':');
-                    	hasReferences.parent().addClass('relationships').show();
+                        var is_composite = (-1 == $('link#primary_role').attr('href').indexOf('Media')) ? true : false;
+                        hasReferences.siblings('h1').text('This ' + selfType + ' is '+((is_composite)?'a note in':'referenced by')+':');
+                        hasReferences.parent().addClass('relationships').show();
                     };
                 }
 
@@ -1213,77 +1237,77 @@
             },
 
             addTKLabels: function() {
-            	// Cosmetics but only if TK Labels are turned on for this book
-            	if ('undefined' == typeof(window['tklabels'])) return;
-            	var $labels = $('article header [typeof="tk:TKLabel"]');
-            	$labels.last().addClass('last');
-            	if (!$labels.length) {
-            		$('<div class="tklabels"></div>').insertBefore('article header h1:first');
-            	} else if (!$labels.parent('.tklabels').length) {
-	            	$labels.wrapAll('<div class="tklabels"></div>');
-            	};
-            	// Add a quick edit feature if logged in
-	            var user_level = ($('link#user_level').length) ? $('link#user_level').attr('href').toLowerCase() : '';
-	            if (-1!=user_level.indexOf('editor')||-1!=user_level.indexOf('author')) {
-	            	var $wrapper = $('article header .tklabels');
-	            	$wrapper.append('<div id="tk-add" title="Update TK Labels for this page" '+((!$labels.length)?'class="desciptor"':'')+'></div>');
-	            	$.getScript($('link#approot').attr('href')+'views/widgets/edit/jquery.add_metadata.js');
-	            	$.getScript($('link#approot').attr('href')+'views/melons/cantaloupe/js/bootbox.min.js');
-	            	$wrapper.find('#tk-add').on('click', function() {
-	            		var data = [];
-	            		$wrapper.children('[typeof="tk:TKLabel"]').each(function() {
-	            			var pnode = $(this).attr('resource').replace('http://localcontexts.org/tk/','tk:');
-	            			data.push(pnode);
-	            		});
-	            		var scope = 'book';
-	            		var ontologies_url = $('link#approot').attr('href').replace('/system/application/','')+'/system/ontologies';
-	            		var tklabels = ('undefined' != typeof(window['tklabels'])) ? window['tklabels'] : null;
-	            		var $blank = $('<div style="display:none;"></div>').appendTo('body');
-	            		$blank.add_metadata({title:'Update TK Labels',ontologies_url:ontologies_url,tklabels:tklabels,scope:scope,active:'tk',active_only:true,add_fields_btn_text:'Update Labels',data:data,callback:function() {
-	            			var selected = [];
-	            			$blank.find('input[value]').each(function() {
-	            				selected.push($(this).attr('value'));
-	            			});
-	            			$wrapper.empty();
-	            			for (var j = 0; j < selected.length; j++) {
-	            				for (var k = 0; k < window['tklabels'].labels.length; k++) {
-	            					if ('tk:'+window['tklabels'].labels[k].code == selected[j]) {
-			            				var url = window['tklabels'].labels[k].image;
-			            				var title = window['tklabels'].labels[k].text.property1.description;
-			            				var description = window['tklabels'].labels[k].text.property2.description;
-				           				var label_template = '';
-				           				label_template += '<span resource="'+selected[j].replace('tk:','http://localcontexts.org/tk/')+'" typeof="tk:TKLabel">';
-				           				label_template += '<a class="metadata" aria-hidden="true" rel="art:url" href="'+url+'"></a>';
-				           				label_template += '<span class="metadata" aria-hidden="true" property="dcterms:title">'+title+'</span>';
-				           				label_template += '<span class="metadata" aria-hidden="true" property="dcterms:description">'+description+'</span>';
-				           				label_template += '</span>';
-				           				$wrapper.append(label_template);
-	            					};
-	            				};
-	            			};
-	            			page.addTKLabels();
-	            			var version_urn = $('link#urn').attr('href');
-	            			var version_id = version_urn.substr(version_urn.lastIndexOf(':')+1);
-	            			var url = $('link#approot').attr('href').replace('system/application/','')+'system/api/save_tklabels';
-	            			$wrapper.find('#tk-add').addClass('bg-warning');
-	            			$.post(url, {version_id:version_id,'tk:hasLabel':selected},function(data) {
-	            				if ('undefined' != typeof(data.error) && data.error.length) {
-	            					alert('There was an error attempting to save TK Labels: '+data.error);
-	            				}
-	            				$wrapper.find('#tk-add').removeClass('bg-warning');
-	            			},'json');
-	            		}});
-	            	});
-	            };
-	            // Info popup about each label
-            	var popover_template = '<div class="popover tk-help caption_font" role="tooltip"><div class="arrow"></div><div class="popover-content"></div></div>';
-            	$labels.each(function() {
-            		var $label = $(this);
+                // Cosmetics but only if TK Labels are turned on for this book
+                if ('undefined' == typeof(window['tklabels'])) return;
+                var $labels = $('article header [typeof="tk:TKLabel"]');
+                $labels.last().addClass('last');
+                if (!$labels.length) {
+                    $('<div class="tklabels"></div>').insertBefore('article header h1:first');
+                } else if (!$labels.parent('.tklabels').length) {
+                    $labels.wrapAll('<div class="tklabels"></div>');
+                };
+                // Add a quick edit feature if logged in
+                var user_level = ($('link#user_level').length) ? $('link#user_level').attr('href').toLowerCase() : '';
+                if (-1!=user_level.indexOf('editor')||-1!=user_level.indexOf('author')) {
+                    var $wrapper = $('article header .tklabels');
+                    $wrapper.append('<div id="tk-add" title="Update TK Labels for this page" '+((!$labels.length)?'class="desciptor"':'')+'></div>');
+                    $.getScript($('link#approot').attr('href')+'views/widgets/edit/jquery.add_metadata.js');
+                    $.getScript($('link#approot').attr('href')+'views/melons/cantaloupe/js/bootbox.min.js');
+                    $wrapper.find('#tk-add').on('click', function() {
+                        var data = [];
+                        $wrapper.children('[typeof="tk:TKLabel"]').each(function() {
+                            var pnode = $(this).attr('resource').replace('http://localcontexts.org/tk/','tk:');
+                            data.push(pnode);
+                        });
+                        var scope = 'book';
+                        var ontologies_url = $('link#approot').attr('href').replace('/system/application/','')+'/system/ontologies';
+                        var tklabels = ('undefined' != typeof(window['tklabels'])) ? window['tklabels'] : null;
+                        var $blank = $('<div style="display:none;"></div>').appendTo('body');
+                        $blank.add_metadata({title:'Update TK Labels',ontologies_url:ontologies_url,tklabels:tklabels,scope:scope,active:'tk',active_only:true,add_fields_btn_text:'Update Labels',data:data,callback:function() {
+                            var selected = [];
+                            $blank.find('input[value]').each(function() {
+                                selected.push($(this).attr('value'));
+                            });
+                            $wrapper.empty();
+                            for (var j = 0; j < selected.length; j++) {
+                                for (var k = 0; k < window['tklabels'].labels.length; k++) {
+                                    if ('tk:'+window['tklabels'].labels[k].code == selected[j]) {
+                                        var url = window['tklabels'].labels[k].image;
+                                        var title = window['tklabels'].labels[k].text.property1.description;
+                                        var description = window['tklabels'].labels[k].text.property2.description;
+                                        var label_template = '';
+                                        label_template += '<span resource="'+selected[j].replace('tk:','http://localcontexts.org/tk/')+'" typeof="tk:TKLabel">';
+                                        label_template += '<a class="metadata" aria-hidden="true" rel="art:url" href="'+url+'"></a>';
+                                        label_template += '<span class="metadata" aria-hidden="true" property="dcterms:title">'+title+'</span>';
+                                        label_template += '<span class="metadata" aria-hidden="true" property="dcterms:description">'+description+'</span>';
+                                        label_template += '</span>';
+                                        $wrapper.append(label_template);
+                                    };
+                                };
+                            };
+                            page.addTKLabels();
+                            var version_urn = $('link#urn').attr('href');
+                            var version_id = version_urn.substr(version_urn.lastIndexOf(':')+1);
+                            var url = $('link#approot').attr('href').replace('system/application/','')+'system/api/save_tklabels';
+                            $wrapper.find('#tk-add').addClass('bg-warning');
+                            $.post(url, {version_id:version_id,'tk:hasLabel':selected},function(data) {
+                                if ('undefined' != typeof(data.error) && data.error.length) {
+                                    alert('There was an error attempting to save TK Labels: '+data.error);
+                                }
+                                $wrapper.find('#tk-add').removeClass('bg-warning');
+                            },'json');
+                        }});
+                    });
+                };
+                // Info popup about each label
+                var popover_template = '<div class="popover tk-help caption_font" role="tooltip"><div class="arrow"></div><div class="popover-content"></div></div>';
+                $labels.each(function() {
+                    var $label = $(this);
                 $label.parent().prepend($label);
-            		$label.css('display', 'inline-block');
-            		var $url = $label.find('a[rel="art:url"]');
-            		var url = $url.attr('href');
-            		$url.replaceWith('<img tabindex="0" rel="art:url" src="'+url+'" data-toggle="popover" data-placement="bottom" />');
+                    $label.css('display', 'inline-block');
+                    var $url = $label.find('a[rel="art:url"]');
+                    var url = $url.attr('href');
+                    $url.replaceWith('<img tabindex="0" rel="art:url" src="'+url+'" data-toggle="popover" data-placement="bottom" />');
                 $label.find('img').popover( {
                   trigger: "manual focus",
                   html: true,
@@ -1291,13 +1315,13 @@
                   container: 'body',
                   content: '<img src="'+url+'" /><p class="supertitle">Traditional Knowledge</p><h3 class="heading_weight">'+$label.find('[property="dcterms:title"]').text()+'</h3><p>'+$label.find('[property="dcterms:description"]').text()+'</p><p><a href="http://localcontexts.org/tk-labels/" target="_blank">More about Traditional Knowledge labels</a></p>'
                 });
-								$label.find('img').click(function(e) {
-									$(this).popover('toggle');
-									e.stopPropagation();
-								})
-            	});
-            	// Move labels to image header if present
-            	if ($('.image_header').length) $('.image_header').prepend($labels.parent());
+                                $label.find('img').click(function(e) {
+                                    $(this).popover('toggle');
+                                    e.stopPropagation();
+                                })
+                });
+                // Move labels to image header if present
+                if ($('.image_header').length) $('.image_header').prepend($labels.parent());
             },
 
             handleEditionSelect: function() {
@@ -1330,10 +1354,10 @@
 
             addColophon: function() {
 
-				if (typeof(window['customColophon']) !== 'undefined') {
-					customColophon();
-					return;
-				}
+                if (typeof(window['customColophon']) !== 'undefined') {
+                    customColophon();
+                    return;
+                }
 
                 var decodedCookie = decodeURIComponent(document.cookie);
                 var currentNode = scalarapi.model.getCurrentPageNode();
@@ -1341,7 +1365,7 @@
                 var can_show_versions = ($('.navbar-header .book-title').find('[data-hide-versions="true"]').length) ? false : true;
                 var $level = $('link#user_level');
                 if ($level.length) {
-                	if ('scalar:author' == $level.attr('href').toLowerCase() || 'scalar:editor' == $level.attr('href').toLowerCase()) {
+                    if ('scalar:author' == $level.attr('href').toLowerCase() || 'scalar:editor' == $level.attr('href').toLowerCase()) {
                         can_show_versions = true;
                         is_author_or_editor = true;
                     }
@@ -1489,12 +1513,12 @@
                 noteViewer.empty();
                 var width = parseInt(noteViewer.css('max-width')) - noteViewer.innerWidth() - 50;
                 if (node != null) {
-                	if (node.current.title != null && noteViewer.data('show-title')) {
-                		$('<div class="title">' + node.current.title + '</div>').appendTo(noteViewer);
-                	}
-                	if (node.current.description != null && noteViewer.data('show-desc')) {
-                		$('<div class="description">' + node.current.description + '</div>').appendTo(noteViewer);
-                	}
+                    if (node.current.title != null && noteViewer.data('show-title')) {
+                        $('<div class="title">' + node.current.title + '</div>').appendTo(noteViewer);
+                    }
+                    if (node.current.description != null && noteViewer.data('show-desc')) {
+                        $('<div class="description">' + node.current.description + '</div>').appendTo(noteViewer);
+                    }
                     if (node.current.content != null && noteViewer.data('show-content')) {
 
                         var height = parseInt(noteViewer.css('max-height')) - noteViewer.innerHeight() - 50;
@@ -1534,7 +1558,7 @@
                         var link = $('<a href="' + node.current.sourceFile + '" data-annotations="[]" data-align="center" resource="' + node.slug + '" class="inline"></a>').hide().appendTo(parent);
                         page.addNoteOrAnnotationMedia(link, parent, width, height);
                     }
-                    noteViewer.append('<a class="noteLink" href="' + scalarapi.model.urlPrefix + node.slug + '">Go to note</a>');
+                    noteViewer.find('.title').after('<p class="link"><a class="noteLink" href="' + scalarapi.model.urlPrefix + node.slug + '">Go to note</a></p>');
                 }
             },
 
@@ -1647,7 +1671,7 @@
                 mediaLinks = [];
 
                 $(element).find('a').each(function() {
-                	var $this = $(this);
+                    var $this = $(this);
                     if (
                     (($this.attr('resource') != null) || // linked media
                     ($this.find('[property="art:url"]').length > 0) || // inline media
@@ -1656,17 +1680,17 @@
                     && ($this.attr('rev') != 'scalar:has_note') && ($this.attr('data-relation') == null) // not a note
                     ) {
                         if ($this.data('widget') != undefined) {
-                        	if (includeWidgets !== true) {
-                        		return;
-                        	} else {
-                        		$this.addClass('widget_link');
-                        	}
+                            if (includeWidgets !== true) {
+                                return;
+                            } else {
+                                $this.addClass('widget_link');
+                            }
                         } else {
-                        	$this.addClass('media_link');
+                            $this.addClass('media_link');
                         }
                         mediaLinks.push($this);
                     } else if ($this.hasClass('inlineNote')) { // inline note
-                    	mediaLinks.push($this);
+                        mediaLinks.push($this);
                     }
                 });
 
@@ -1682,10 +1706,10 @@
             },
 
             sendMessage: function(mediaelement, message) {
-          		if (message && mediaelement.view.mediaObjectView.hasFrameLoaded) {
+                if (message && mediaelement.view.mediaObjectView.hasFrameLoaded) {
                 mediaelement.sendMessage(message);
-          		}
-          	},
+                }
+            },
 
             // trigger media playback when links are clicked on
             handleMediaLinkClick: function(e) {
@@ -1702,15 +1726,23 @@
                         // the media if it isn't already playing
                         var annotationURL = $(this).data('targetAnnotation');
                         if (annotationURL != null) {
-                            mediaelement.seek(mediaelement.model.initialSeekAnnotation);
-                            page.sendMessage(mediaelement, page.annotationHasMessage(mediaelement.model.initialSeekAnnotation));
-                            if ((mediaelement.model.mediaSource.contentType != 'document') && (mediaelement.model.mediaSource.contentType != 'image')) {
-                                setTimeout(function() {
-                                    if (!mediaelement.is_playing()) {
-                                        mediaelement.play();
-                                    }
-                                }, 250);
+                          var annotation;
+                          var relations = mediaelement.model.node.getRelations('annotation', 'incoming');
+                          for (var i in relations) {
+                            if (relations[i].body.url == annotationURL) {
+                              annotation = relations[i];
                             }
+                          }
+                          if (!annotation) annotation = mediaelement.model.initialSeekAnnotation;
+                          mediaelement.seek(annotation);
+                          page.sendMessage(mediaelement, page.annotationHasMessage(annotation));
+                          if ((mediaelement.model.mediaSource.contentType != 'document') && (mediaelement.model.mediaSource.contentType != 'image')) {
+                              setTimeout(function() {
+                                  if (!mediaelement.is_playing()) {
+                                      mediaelement.play();
+                                  }
+                              }, 250);
+                          }
 
                         } else if (mediaelement.is_playing()) {
                             mediaelement.pause();
@@ -1738,9 +1770,11 @@
                 var scroll_time = 750;
                 var $body = $('html,body');
 
-                //scroll to media element when link is clicked
-                if (!(($mediaelement.offset().top + $mediaelement.height()) <= (-$body.offset().top + $body.height()) &&
-                        $mediaelement.offset().top >= (-$body.offset().top))) {
+                var mediaTop = $mediaelement.offset().top;
+                var scrollTop = $body.scrollTop();
+                var halfWindowHeight = window.innerHeight * .5;
+                // scroll to media element when link is clicked
+                if (mediaTop < scrollTop || mediaTop > (scrollTop + halfWindowHeight)) {
                     $body.animate({
                         scrollTop: $mediaelement.offset().top - scroll_buffer
                     }, scroll_time);
@@ -1796,7 +1830,7 @@
                   } else {
                     visualization.empty();
                   }
-                  div.ScalarLenses({onLensResults: this.handleLensResults})
+                  div.ScalarLenses({onLensResults: this.handleLensResults});
                 });
               }
             },
@@ -2128,7 +2162,7 @@
                                     return;
                                 }
                                 if ($(this).hasClass('inlineNote')) {
-                                	page.addInlineNoteElementForLink($(this));
+                                    page.addInlineNoteElementForLink($(this));
                                 } else if ($(this).hasClass('widget_link')) {
                                     if ($(this).data('slot') !== undefined) {
                                         $(this).data('slot').remove();
@@ -2209,7 +2243,8 @@
 
                             // if this is a media page, embed the media at native size
                             if ($('[resource="' + currentNode.url + '"][typeof="scalar:Media"]').length > 0) {
-                                var link = $('<a href="' + currentNode.current.sourceFile + '" resource="' + currentNode.slug + '" data-align="left" class="media-page-link" data-size="native"></a>').appendTo(page.bodyContent());
+                                var size = ('full' == viewType) ? 'full' : 'native';
+                                var link = $('<a href="' + currentNode.current.sourceFile + '" resource="' + currentNode.slug + '" data-align="left" class="media-page-link" data-size="'+size+'"></a>').appendTo(page.bodyContent());
                                 link.wrap('<div></div>');
                                 page.addMediaElementForLink(link, link.parent());
                                 link.css('display', 'none');
@@ -2223,11 +2258,11 @@
                             page.mediaDetails = $.scalarmediadetails($('<div></div>').appendTo('body'));
 
                             /*$('.annotation_of').each( function() {
-                            	node = scalarapi.getNode( $( this ).attr( 'href' ) );
-                            	if ( node != null ) {
-                            		page.addMediaElementForLink( $( this ), $( this ).parent() );
-                            		//$( this ).css('display', 'none');
-                            	}
+                                node = scalarapi.getNode( $( this ).attr( 'href' ) );
+                                if ( node != null ) {
+                                    page.addMediaElementForLink( $( this ), $( this ).parent() );
+                                    //$( this ).css('display', 'none');
+                                }
                             } );*/
 
                             break;
@@ -2325,6 +2360,9 @@
                 $('.mediainfo').remove();
                 $('.media-page-link').remove();
 
+                page.mediaSlots = [];
+                page.mediaSlotsByResource = {};
+
                 page.clearIncrementedData();
 
                 $('a.media_link').each(function() {
@@ -2391,9 +2429,9 @@
             },
 
             addExternalLinks: function() {
-            	var can_use_external_page = ($('link#external_direct_hyperlink').length && 'true'==$('link#external_direct_hyperlink').attr('href')) ? false : true;
-            	if (!can_use_external_page) return;
-            	page.bodyContentLinks().each(function() {
+                var can_use_external_page = ($('link#external_direct_hyperlink').length && 'true'==$('link#external_direct_hyperlink').attr('href')) ? false : true;
+                if (!can_use_external_page) return;
+                page.bodyContentLinks().each(function() {
                     var base_url = $('link#parent').attr('href');
                     var $link = $(this);
                     var resource = $link.attr('resource');
@@ -2468,9 +2506,9 @@
                             html: contentString,
                             title: title,
                             icon: {
-                		    			url: src,
+                                        url: src,
                               scaledSize: new google.maps.Size(40,40)
-                		    		}
+                                    }
                         });
                         google.maps.event.addListener(marker, 'click', function() {
                             infoWindow.setContent(this.html);
@@ -2855,18 +2893,18 @@
 
             page.getContainingPathInfo();
 
-        		var cover_video = function() {  // Have <video> tag mimic background-size:cover
-        			$video = $(this);
-        			var scale_h = parseInt($video.parent().parent().width()) / $video.data('orig_w');
-        			var scale_v = parseInt($video.parent().parent().height()) / $video.data('orig_h');
-        			var scale = scale_h > scale_v ? scale_h : scale_v;
+                var cover_video = function() {  // Have <video> tag mimic background-size:cover
+                    $video = $(this);
+                    var scale_h = parseInt($video.parent().parent().width()) / $video.data('orig_w');
+                    var scale_v = parseInt($video.parent().parent().height()) / $video.data('orig_h');
+                    var scale = scale_h > scale_v ? scale_h : scale_v;
               $video.parent().height($video.parent().parent().height());
-        			$video.width(scale * $video.data('orig_w'));
-        			$video.height(scale * $video.data('orig_h'));
-            	$video.parent().scrollLeft( ($video.width() - $video.parent().width()) * .5 );
-            	$video.parent().scrollTop( ($video.height() - $video.parent().height()) * .5 );
+                    $video.width(scale * $video.data('orig_w'));
+                    $video.height(scale * $video.data('orig_h'));
+                $video.parent().scrollLeft( ($video.width() - $video.parent().width()) * .5 );
+                $video.parent().scrollTop( ($video.height() - $video.parent().height()) * .5 );
               $video.show();
-        		}
+                }
 
             switch (viewType) {
 
@@ -2884,24 +2922,24 @@
 
                     var banner = currentNode.banner;
                     if ('undefined' != typeof(banner) && banner.length && -1 == banner.indexOf('//')) {
-                    	banner = $('link#parent').attr('href') + banner;
+                        banner = $('link#parent').attr('href') + banner;
                     } else if ('undefined' == typeof(banner) || !banner) {
-                    	banner = '';
+                        banner = '';
                     };
                     $('[property="art:url"]').hide();
                     if ('.mp4'==banner.substr(banner.length-4, 4)) {  // The controller looks for ".mp4" so do the same here ~cd
-                    	element.addClass('has_video').prepend('<div class="video_wrapper"><video autoplay muted loop playsinline preload="none"><source src="'+banner+'" type="video/mp4"></video></div>');
-                    	element.find('.video_wrapper video:first').on('loadedmetadata', function() {
-                    		var $video = $(this);
-                    		var self = this;
-                    		$video.data('orig_w', parseInt($video.get(0).videoWidth));
-                    		$video.data('orig_h', parseInt($video.get(0).videoHeight));
-                    		$(window).on('resize', function() {
-                    			cover_video.call($video.get(0));
-                    		}).trigger('resize');
-                    	});
+                        element.addClass('has_video').prepend('<div class="video_wrapper"><video autoplay muted loop playsinline preload="none"><source src="'+banner+'" type="video/mp4"></video></div>');
+                        element.find('.video_wrapper video:first').on('loadedmetadata', function() {
+                            var $video = $(this);
+                            var self = this;
+                            $video.data('orig_w', parseInt($video.get(0).videoWidth));
+                            $video.data('orig_h', parseInt($video.get(0).videoHeight));
+                            $(window).on('resize', function() {
+                                cover_video.call($video.get(0));
+                            }).trigger('resize');
+                        });
                     } else {
-                    	element.css('background-image', "url('" + banner + "')");
+                        element.css('background-image', "url('" + banner + "')");
                     }
                     $('body').css('backgroundImage', 'none');
                     $('.paragraph_wrapper').remove();
@@ -2919,23 +2957,22 @@
                     var parent = $('link#parent').attr('href');
                     var api_url = null;
                     if (-1 == banner.indexOf(parent)) {  // External file
-                    	// TODO
+                        // TODO
                     } else {  // Local file
-                    	api_url = parent+'rdf/file/'+banner.replace(parent,'')+'?format=json';
+                        api_url = parent+'rdf/file/'+banner.replace(parent,'')+'?format=json';
                     }
                     if (null != api_url) {
-	                    $.getJSON(api_url, function(media_node) {
-	                    	for (var uri in media_node) {
-	                    		if ('undefined' == typeof(media_node[uri]['http://open.vocab.org/terms/versionnumber'])) continue;
-	                    		var url = media_node[uri]['http://purl.org/dc/terms/isVersionOf'][0].value;
-	                    		var title = media_node[uri]['http://purl.org/dc/terms/title'][0].value;
-	                    		//var description = ('undefined'!=typeof(media_node[uri]['http://purl.org/dc/terms/description'])) ? media_node[uri]['http://purl.org/dc/terms/description'][0].value : null;
-	                    		var source = ('undefined'!=typeof(media_node[uri]['http://purl.org/dc/terms/source'])) ? media_node[uri]['http://purl.org/dc/terms/source'][0].value : null;
-	                    		if (-1 != source.indexOf('//')) source = null;  // Is a URL
-	                    		var html = '<div class="citation caption_font"><a href="'+url+'">Background: '+title+''+((null!=source)?' ('+source+')':'')+'</a></div>';
-	                    		$('.title_card').append(html);
-	                    	}
-	                    });
+                        $.getJSON(api_url, function(media_node) {
+                            for (var uri in media_node) {
+                                if ('undefined' == typeof(media_node[uri]['http://open.vocab.org/terms/versionnumber'])) continue;
+                                var url = media_node[uri]['http://purl.org/dc/terms/isVersionOf'][0].value;
+                                var title = media_node[uri]['http://purl.org/dc/terms/title'][0].value;
+                                var source = ('undefined'!=typeof(media_node[uri]['http://purl.org/dc/terms/source'])) ? media_node[uri]['http://purl.org/dc/terms/source'][0].value : null;
+                                if (source) if (-1 != source.indexOf('//')) source = null;  // Is a URL
+                                var html = '<div class="citation caption_font"><a href="'+url+'">Background: '+title+''+((null!=source)?' ('+source+')':'')+'</a></div>';
+                                $('.title_card').append(html);
+                            }
+                        });
                     };
                     break;
 
@@ -3004,23 +3041,23 @@
                 case 'image_header':
                     var banner = currentNode.banner;
                     if ('undefined' != typeof(banner) && banner.length && -1 == banner.indexOf('//')) {
-                    	banner = $('link#parent').attr('href') + banner;
+                        banner = $('link#parent').attr('href') + banner;
                     } else if ('undefined' == typeof(banner) || !banner) {
-                    	banner = '';
+                        banner = '';
                     };
                     $('article > header').before('<div class="image_header"><div class="title_card"></div></div>');
                     if ('.mp4'==banner.substr(banner.length-4, 4)) {  // The controller looks for ".mp4" so do the same here ~cd
-                    	$('.image_header').addClass('has_video').prepend('<div class="video_wrapper"><video autoplay muted loop playsinline preload="none"><source src="'+banner+'" type="video/mp4"></video></div>');
-                    	$('.image_header').find('.video_wrapper video:first').on('loadedmetadata', function() {
-                    		var $video = $(this);
-                    		$video.data('orig_w', parseInt($video.get(0).videoWidth));
-                    		$video.data('orig_h', parseInt($video.get(0).videoHeight));
-                    		$(window).on('resize', function() {
-                    			cover_video.call($video.get(0));
-                    		}).trigger('resize');
-                    	});
+                        $('.image_header').addClass('has_video').prepend('<div class="video_wrapper"><video autoplay muted loop playsinline preload="none"><source src="'+banner+'" type="video/mp4"></video></div>');
+                        $('.image_header').find('.video_wrapper video:first').on('loadedmetadata', function() {
+                            var $video = $(this);
+                            $video.data('orig_w', parseInt($video.get(0).videoWidth));
+                            $video.data('orig_h', parseInt($video.get(0).videoHeight));
+                            $(window).on('resize', function() {
+                                cover_video.call($video.get(0));
+                            }).trigger('resize');
+                        });
                     } else {
-                    	$('.image_header').css('background-image', "url('" + banner + "')");
+                        $('.image_header').css('background-image', "url('" + banner + "')");
                     };
                     $('.title_card').append($('header > h1'));
                     if (currentNode.current.description != null) {
@@ -3446,8 +3483,8 @@
                             break;
 
                         case "edit":
-                        	okToAddExtras = false;
-                        	break;
+                            okToAddExtras = false;
+                            break;
 
                         case "annotation_editor":
                             var headerString = '<h2 style="margin-bottom: 0rem;">Annotation editor</h2>';
@@ -3474,17 +3511,17 @@
                             break;
 
                         case "curriculum_explorer":
-                        	$('<link>').appendTo('head').attr({
-                        		type: 'text/css',
-                        	    rel: 'stylesheet',
-                        	    href: $('link#approot').attr('href')+'views/widgets/curriculumexplorer/curriculumexplorer.css'
-                        	});
-                        	$.getScript($('link#approot').attr('href')+'views/widgets/curriculumexplorer/curriculumexplorer.js', function() {
-                            	var node = scalarapi.model.getCurrentPageNode();
-                            	curriculumexplorer(node);
-                        	});
-                        	okToAddExtras = false;
-                        	break;
+                            $('<link>').appendTo('head').attr({
+                                type: 'text/css',
+                                rel: 'stylesheet',
+                                href: $('link#approot').attr('href')+'views/widgets/curriculumexplorer/curriculumexplorer.css'
+                            });
+                            $.getScript($('link#approot').attr('href')+'views/widgets/curriculumexplorer/curriculumexplorer.js', function() {
+                                var node = scalarapi.model.getCurrentPageNode();
+                                curriculumexplorer(node);
+                            });
+                            okToAddExtras = false;
+                            break;
 
                         case 'visual_path':
                             // original concept for this layout by Alicia Peaker, Bryn Mawr College
@@ -3499,10 +3536,10 @@
                                     var slug = pathContents[i].slug
                                     var slugProxy = slug.replace('/', '-');
                                     var key = (pathContents[i].data['http://scalar.usc.edu/2012/01/scalar-ns#banner']) ? pathContents[i].data['http://scalar.usc.edu/2012/01/scalar-ns#banner'][0].value : '';
-                                	if ('undefined'==typeof(key)) {
-                                		key = '';
-                                	} else if (-1==key.indexOf('://')) {
-                                    	key = base_url+key;
+                                    if ('undefined'==typeof(key)) {
+                                        key = '';
+                                    } else if (-1==key.indexOf('://')) {
+                                        key = base_url+key;
                                     }
                                     var description = (pathContents[i].current.description) ? pathContents[i].current.description : ' ';
                                     var $description = $('<div>'+description+'</div>');
@@ -3516,17 +3553,18 @@
                                     $("[property='sioc:content']").append('<div class="sp-block sp-block-'+default_view+'" id="'+slugProxy+'"><h1 class="padded-multiline"><a class="sp-title" href="'+base_url+slug+'">' + title + '</a></h1><div class="sp-block__content ' +slugProxy+ '">' +((description.length)?description:'')+ '</div></div>');
                                     // set background
                                     if ('.mp4'==key.substr(key.length-4, 4)) {  // The controller looks for ".mp4" so do the same here ~cd
-                                    	$("#"+slugProxy).addClass('has_video').prepend('<div class="video_wrapper"><video autoplay muted loop playsinline preload="none"><source src="'+key+'" type="video/mp4"></video></div>');
-                                    	$("#"+slugProxy).find('.video_wrapper video:first').on('loadedmetadata', function() {
-                                    		var $video = $(this);
-                                    		$video.data('orig_w', parseInt($video.get(0).videoWidth));
-                                    		$video.data('orig_h', parseInt($video.get(0).videoHeight));
-                                    		$(window).on('resize', function() {
-                                    			cover_video.call($video.get(0));
-                                    		}).trigger('resize');
-                                    	});
+                                        $("#"+slugProxy).addClass('has_video').prepend('<div class="video_wrapper"><video autoplay muted loop playsinline preload="none"><source src="'+key+'" type="video/mp4"></video></div>');
+                                        $("#"+slugProxy).find('.video_wrapper video:first').on('loadedmetadata', function() {
+                                            var $video = $(this);
+                                            $video.data('orig_w', parseInt($video.get(0).videoWidth));
+                                            $video.data('orig_h', parseInt($video.get(0).videoHeight));
+                                            $(window).on('resize', function() {
+                                                cover_video.call($video.get(0));
+                                            }).trigger('resize');
+                                        });
                                     } else {
                                         $("#"+slugProxy).css({ "background-image": 'url("'+((key.length)?key:'')+'")' });
+                                        if (isMobile) $("#"+slugProxy).addClass('mobile');
                                     };
                                     // end set background
                                     $('#'+slugProxy).find('.sp-block__content').append('<div><a class="nav_btn primary" href="'+base_url+slug+'">Continue</a></div>')
@@ -3534,7 +3572,8 @@
                                     $("#"+slugProxy).append('<div style="visibility:hidden; clear:both; height:1px; overflow:hidden;"></div>');
                                 }
                             }
-                            okToAddExtras = true;
+                            okToAddExtras = false;
+                            page.addNotes();
                             break;
                     }
 
@@ -3587,16 +3626,16 @@
             $('h1, h2, h3').addClass('clearboth');
 
             /*
-			$( document ).ready( function() {
-				if ( !$.cookie( 'warningMessageDismissed' ) ) {
-					var message = $('<div id="message" style="position: absolute; cursor: pointer; left: 20px; top: 70px; max-width: 400px; padding: 15px; z-index:99999; background-color: #fdcccb;">Warning message</div>').appendTo( 'body' );
-					message.on('click',  function() {
-						$( this ).hide();
-						$.cookie( 'warningMessageDismissed', true, { path: '/' } );
-					} );
-				}
-			} );
-			*/
+            $( document ).ready( function() {
+                if ( !$.cookie( 'warningMessageDismissed' ) ) {
+                    var message = $('<div id="message" style="position: absolute; cursor: pointer; left: 20px; top: 70px; max-width: 400px; padding: 15px; z-index:99999; background-color: #fdcccb;">Warning message</div>').appendTo( 'body' );
+                    message.on('click',  function() {
+                        $( this ).hide();
+                        $.cookie( 'warningMessageDismissed', true, { path: '/' } );
+                    } );
+                }
+            } );
+            */
 
             page.handleBook(); // we used to bind this to the return of a loadBook call, but now we can call it immediately
 
