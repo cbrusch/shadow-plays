@@ -1241,7 +1241,8 @@ a.media_link {
 }
 div.slot {
 	background-color: transparent;
-	background-image: none;
+	/*background-image: none;*/
+	/* somehow the line above blocks the caption metadata from rendering in html */
 }
 div.widgetContainer.well.page_margins {
 	margin-left: auto !important;
