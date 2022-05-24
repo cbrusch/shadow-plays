@@ -333,7 +333,7 @@ h6.home__byline {
 
 /*** Visual Table of Contents ***/
 #home__toc {
-	background: url("../../media_large/bkg_toc.png");
+	background: url("../media_large/bkg_toc.png");
 	background-repeat: no-repeat;
 	background-size: cover;
 	color: #fff;
@@ -1762,7 +1762,7 @@ a.further-insights {
 	z-index: 5;
 }
 .bkg-logo {
-	background: url(../../media_large/further-insights-logo);
+	background: url(../media_large/further-insights-logo);
 	background-repeat: no-repeat;
 	height: 100vh;
 	position: fixed !important;
