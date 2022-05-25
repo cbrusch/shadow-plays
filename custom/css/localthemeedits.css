@@ -891,8 +891,9 @@ article #home__simulations h5 {
 	align-items: center;
 	justify-content: center;
 	grid-column: 1 / 13;
-	height: 12rem;
+	height: 170px;
 	margin: 0;
+	padding-bottom: 50px;
 	position: relative;
 }
 #home__footer ul {
