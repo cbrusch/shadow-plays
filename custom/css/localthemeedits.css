@@ -1800,4 +1800,36 @@ article.page .title_card section.relationships {
 	margin-bottom: 9rem !important;
 }
 
-
+body.page-further-insights-cosmoramas, 
+body.page-further-insights-a-family-theme, 
+body.page-further-insights-a-pictorial-cosmorama, 
+body.page-further-insights-an-uncanny-musical-scherzo, 
+body.page-further-insights-the-interior-of-our-eye, 
+body.page-further-insights-eidophusikon, 
+body.page-further-insights-panoptical-theatre, 
+body.page-further-insights-the-stolen-crystal, 
+body.page-further-insights-the-shadow-show, 
+body.page-further-insights-the-call-of-egypt-a-moving-panorama, 
+body.page-further-insights-a-sarcophagus-party, 
+body.page-further-insights-why-did-he-go-there, 
+body.page-further-insights-who-created-the-panorama, 
+body.page-further-insights-history-at-a-glance, 
+body.page-further-insights-garibaldi-and-robin-hood, 
+body.page-further-insights-the-battle-of-aspromonte, 
+body.page-further-insights-stereoscopic-travel, 
+body.page-further-insights-stereoscopic-library {
+	.fake-footer {
+		height: 32vh;
+	}
+	.fake-footer, 
+	.bkg-logo {
+		margin-bottom: 50px;
+	}
+	section.relationships {
+		margin-top: 150px;
+		padding-top: 2.4rem;
+	}
+	section.relationships p.container {
+		position: relative;
+	}
+}
