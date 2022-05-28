@@ -1764,7 +1764,7 @@ a.further-insights {
 	z-index: 5;
 }
 .bkg-logo {
-	background: url(../../media_large/further-insights-logo);
+	background: url(../../media_large/further-insights-logo.svg);
 	background-repeat: no-repeat;
 	height: 100vh;
 	position: fixed !important;
