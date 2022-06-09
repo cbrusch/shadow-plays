@@ -1800,38 +1800,88 @@ article.page .title_card section.relationships {
 	margin-bottom: 9rem !important;
 }
 
-body.page-further-insights-cosmoramas, 
-body.page-further-insights-a-family-theme, 
-body.page-further-insights-a-pictorial-cosmorama, 
-body.page-further-insights-an-uncanny-musical-scherzo, 
-body.page-further-insights-the-interior-of-our-eye, 
-body.page-further-insights-eidophusikon, 
-body.page-further-insights-panoptical-theatre, 
-body.page-further-insights-the-stolen-crystal, 
-body.page-further-insights-the-shadow-show, 
-body.page-further-insights-the-call-of-egypt-a-moving-panorama, 
-body.page-further-insights-a-sarcophagus-party, 
-body.page-further-insights-why-did-he-go-there, 
-body.page-further-insights-who-created-the-panorama, 
-body.page-further-insights-history-at-a-glance, 
-body.page-further-insights-garibaldi-and-robin-hood, 
-body.page-further-insights-the-battle-of-aspromonte, 
-body.page-further-insights-stereoscopic-travel, 
-body.page-further-insights-stereoscopic-library {
-	.fake-footer {
-		height: 32vh;
-	}
-	.fake-footer, 
-	.bkg-logo {
-		margin-bottom: 50px;
-	}
-	section.relationships {
-		margin-top: 150px;
-		padding-top: 2.4rem;
-	}
-	section.relationships p.container {
-		position: relative;
-	}
+body.page-further-insights-cosmoramas .fake_footer, 
+body.page-further-insights-a-family-theme .fake_footer, 
+body.page-further-insights-a-pictorial-cosmorama .fake_footer, 
+body.page-further-insights-an-uncanny-musical-scherzo .fake_footer, 
+body.page-further-insights-the-interior-of-our-eye .fake_footer, 
+body.page-further-insights-eidophusikon .fake_footer, 
+body.page-further-insights-panoptical-theatre .fake_footer, 
+body.page-further-insights-the-stolen-crystal .fake_footer, 
+body.page-further-insights-the-shadow-show .fake_footer, 
+body.page-further-insights-the-call-of-egypt-a-moving-panorama .fake_footer, 
+body.page-further-insights-a-sarcophagus-party .fake_footer, 
+body.page-further-insights-why-did-he-go-there .fake_footer, 
+body.page-further-insights-who-created-the-panorama .fake_footer, 
+body.page-further-insights-history-at-a-glance .fake_footer, 
+body.page-further-insights-garibaldi-and-robin-hood .fake_footer, 
+body.page-further-insights-the-battle-of-aspromonte .fake_footer, 
+body.page-further-insights-stereoscopic-travel .fake_footer, 
+body.page-further-insights-stereoscopic-library .fake_footer {
+	height: 330px;
+}
+body.page-further-insights-cosmoramas .bkg-logo, 
+body.page-further-insights-a-family-theme .bkg-logo, 
+body.page-further-insights-a-pictorial-cosmorama .bkg-logo, 
+body.page-further-insights-an-uncanny-musical-scherzo .bkg-logo, 
+body.page-further-insights-the-interior-of-our-eye .bkg-logo, 
+body.page-further-insights-eidophusikon .bkg-logo, 
+body.page-further-insights-panoptical-theatre .bkg-logo, 
+body.page-further-insights-the-stolen-crystal .bkg-logo, 
+body.page-further-insights-the-shadow-show .bkg-logo, 
+body.page-further-insights-the-call-of-egypt-a-moving-panorama .bkg-logo, 
+body.page-further-insights-a-sarcophagus-party .bkg-logo, 
+body.page-further-insights-why-did-he-go-there .bkg-logo, 
+body.page-further-insights-who-created-the-panorama .bkg-logo, 
+body.page-further-insights-history-at-a-glance .bkg-logo, 
+body.page-further-insights-garibaldi-and-robin-hood .bkg-logo, 
+body.page-further-insights-the-battle-of-aspromonte .bkg-logo, 
+body.page-further-insights-stereoscopic-travel .bkg-logo, 
+body.page-further-insights-stereoscopic-library .bkg-logo {
+	margin-bottom: 50px;
+}
+body.page-further-insights-cosmoramas section.relationships, 
+body.page-further-insights-a-family-theme section.relationships, 
+body.page-further-insights-a-pictorial-cosmorama section.relationships, 
+body.page-further-insights-an-uncanny-musical-scherzo section.relationships, 
+body.page-further-insights-the-interior-of-our-eye section.relationships, 
+body.page-further-insights-eidophusikon section.relationships, 
+body.page-further-insights-panoptical-theatre section.relationships, 
+body.page-further-insights-the-stolen-crystal section.relationships, 
+body.page-further-insights-the-shadow-show section.relationships, 
+body.page-further-insights-the-call-of-egypt-a-moving-panorama section.relationships, 
+body.page-further-insights-a-sarcophagus-party section.relationships, 
+body.page-further-insights-why-did-he-go-there section.relationships, 
+body.page-further-insights-who-created-the-panorama section.relationships, 
+body.page-further-insights-history-at-a-glance section.relationships, 
+body.page-further-insights-garibaldi-and-robin-hood section.relationships, 
+body.page-further-insights-the-battle-of-aspromonte section.relationships, 
+body.page-further-insights-stereoscopic-travel section.relationships, 
+body.page-further-insights-stereoscopic-library section.relationships {
+	height: auto !important;
+	margin-top: 200px !important;
+	margin-bottom: 0 !important;
+	padding-top: 2.4rem;	
+}
+body.page-further-insights-cosmoramas section.relationships p.container, 
+body.page-further-insights-a-family-theme section.relationships p.container, 
+body.page-further-insights-a-pictorial-cosmorama section.relationships p.container, 
+body.page-further-insights-an-uncanny-musical-scherzo section.relationships p.container, 
+body.page-further-insights-the-interior-of-our-eye section.relationships p.container, 
+body.page-further-insights-eidophusikon section.relationships p.container, 
+body.page-further-insights-panoptical-theatre section.relationships p.container, 
+body.page-further-insights-the-stolen-crystal section.relationships p.container, 
+body.page-further-insights-the-shadow-show section.relationships p.container, 
+body.page-further-insights-the-call-of-egypt-a-moving-panorama section.relationships p.container, 
+body.page-further-insights-a-sarcophagus-party section.relationships p.container, 
+body.page-further-insights-why-did-he-go-there section.relationships p.container, 
+body.page-further-insights-who-created-the-panorama section.relationships p.container, 
+body.page-further-insights-history-at-a-glance section.relationships p.container, 
+body.page-further-insights-garibaldi-and-robin-hood section.relationships p.container, 
+body.page-further-insights-the-battle-of-aspromonte section.relationships p.container, 
+body.page-further-insights-stereoscopic-travel section.relationships p.container, 
+body.page-further-insights-stereoscopic-library section.relationships p.container {
+	position: relative;	
 }
 
 div.further-insights__container {
