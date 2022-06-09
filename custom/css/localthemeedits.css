@@ -1736,6 +1736,10 @@ body.parent-simulations section.relationships p.container a.continue_btn.nav_btn
 	color: #231f20 !important;
 	text-decoration: underline;
 }
+.fake_body_copy.further_insights a.texteo_icon.texteo_icon_note:hover,
+.fake_body_copy.further_insights a.texteo_icon.texteo_icon_note:focus {
+	color: #895278 !important;
+}
 .fake_body_copy.further_insights blockquote {
 	border-top: 1px solid #663d43 !important;
 	border-bottom: 1px solid #663d43 !important;
