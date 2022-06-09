@@ -1820,6 +1820,18 @@ body.page-further-insights-stereoscopic-travel .fake_footer,
 body.page-further-insights-stereoscopic-library .fake_footer {
 	height: 330px;
 }
+.fake_footer.back-matter {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	height: 280px;
+	margin-bottom: 50px;
+	padding-top: 0 !important;
+}
+body.page-acknowledgments article.page > span > div:first-child, 
+body.page-works-cited article.page > span > div:first-child {
+	margin-bottom: 50px;
+} 
 body.page-further-insights-cosmoramas .bkg-logo, 
 body.page-further-insights-a-family-theme .bkg-logo, 
 body.page-further-insights-a-pictorial-cosmorama .bkg-logo, 
