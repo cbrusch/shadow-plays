@@ -1155,11 +1155,17 @@ a.nav_btn.primary {
 	width: 100%;
 }
 a.nav_btn:hover,
-a.nav_btn.primary:hover {
+a.nav_btn:focus,
+a.nav_btn.primary:hover,
+a.nav_btn.primary:focus {
 	background-color: transparent;
 	color: #fff;
 	text-decoration: underline;
 	transition: color .2s;
+}
+a.nav_btn:focus,
+a.nav_btn.primary:focus {
+	outline: dotted 1px #fff;
 }
 a#back-btn {
 	text-align: left;
@@ -1682,9 +1688,10 @@ body.parent-simulations section.relationships p.container a.continue_btn.nav_btn
 	background-color: hsla(31, 96%, 73%, 1);
 	transition: background-color .3s;
 }
-.layer1:hover a.layer__link {
+.layer1:hover a.layer__link, 
+.layer1 a.layer__link:focus {
 	color: #231f20;
-	text-decoration: none;
+	text-decoration: underline;
 }
 .layer1:hover ~ .layer2 {
 	background-color: hsla(31, 96%, 65%, .5);
