@@ -1167,6 +1167,19 @@ a.nav_btn:focus,
 a.nav_btn.primary:focus {
 	outline: dotted 1px #fff;
 }
+a.nav_btn .heading__simulation {
+	white-space: pre;
+}
+a.nav_btn:hover .heading__simulation, 
+a.nav_btn:hover .title__simulation, 
+a.nav_btn:focus .heading__simulation, 
+a.nav_btn:focus .title__simulation, 
+a.nav_btn.primary:hover .heading__simulation, 
+a.nav_btn.primary:hover .title__simulation, 
+a.nav_btn.primary:focus .heading__simulation, 
+a.nav_btn.primary:focus .title__simulation {
+	text-decoration: underline;
+}
 a#back-btn {
 	text-align: left;
 }
@@ -1940,3 +1953,38 @@ section.relationships p.container > div a#back-btn {
 	vertical-align: baseline;
 }
 
+#ScalarHeaderMenu h2.heading_font {
+	border: none;
+}
+
+body.page-simulation-1 .caption_font.path-breadcrumb > a, 
+body.page-simulation-2 .caption_font.path-breadcrumb > a,
+body.page-simulation-3 .caption_font.path-breadcrumb > a,
+body.page-simulation-4 .caption_font.path-breadcrumb > a,
+body.page-simulation-5 .caption_font.path-breadcrumb > a,
+body.page-simulation-6 .caption_font.path-breadcrumb > a,
+body.page-simulation-7 .caption_font.path-breadcrumb > a,
+body.page-simulation-8 .caption_font.path-breadcrumb > a {
+	text-decoration: underline;
+}
+body.page-simulation-1 .caption_font.path-breadcrumb > a:hover,
+body.page-simulation-2 .caption_font.path-breadcrumb > a:hover,
+body.page-simulation-3 .caption_font.path-breadcrumb > a:hover,
+body.page-simulation-4 .caption_font.path-breadcrumb > a:hover,
+body.page-simulation-5 .caption_font.path-breadcrumb > a:hover,
+body.page-simulation-6 .caption_font.path-breadcrumb > a:hover,
+body.page-simulation-7 .caption_font.path-breadcrumb > a:hover,
+body.page-simulation-8 .caption_font.path-breadcrumb > a:hover {
+	color: #FCBD7A;
+}
+body.page-simulation-1 .caption_font.path-breadcrumb > a:focus,
+body.page-simulation-2 .caption_font.path-breadcrumb > a:focus,
+body.page-simulation-3 .caption_font.path-breadcrumb > a:focus,
+body.page-simulation-4 .caption_font.path-breadcrumb > a:focus,
+body.page-simulation-5 .caption_font.path-breadcrumb > a:focus,
+body.page-simulation-6 .caption_font.path-breadcrumb > a:focus,
+body.page-simulation-7 .caption_font.path-breadcrumb > a:focus,
+body.page-simulation-8 .caption_font.path-breadcrumb > a:focus {
+	color: #FCBD7A;
+	outline: 1px dotted #FCBD7A;
+}
