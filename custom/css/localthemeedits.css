@@ -45,20 +45,87 @@ Yellow, Light: #fff7ef;
 /***** End Color Palette *****/
 
 /***** Typography *****/
-/* type edits to match SR design */
-
-/* Adobe Caslon Pro fonts load from Adobe Fonts */
-@import url(//use.typekit.net/emu6cbb.css);
-.body_font {
-	font-family: 'adobe-caslon-pro', Georgia, serif !important;
-}
-
-/* Gabriela Stencil Bold is locally hosted */
-/* @import url("//hello.myfonts.net/count/3889cd"); */
+/* Adobe Caslon Pro*/
 @font-face {
-	font-family: 'GabrielaStencil-Bold';
-	src: url('../fonts/3889CD_0_0.eot');
-	src: url('../fonts/3889CD_0_0.eot?#iefix') format('embedded-opentype'),url('../fonts/3889CD_0_0.woff2') format('woff2'),url('../fonts/3889CD_0_0.woff') format('woff'),url('../fonts/3889CD_0_0.ttf') format('truetype');
+    font-family: 'AdobeCaslonPro';
+    src: url('../fonts/acaslonpro-regular-webfont.woff2') format('woff2'),
+         url('../fonts/acaslonpro-regular-webfont.woff') format('woff'),
+         url('../fonts/acaslonpro-regular.otf') format('opentype');
+    font-style: normal;
+    font-weight: 400;
+}
+@font-face {
+    font-family: 'AdobeCaslonPro';
+    src: url('../fonts/acaslonpro-italic-webfont.woff2') format('woff2'),
+         url('../fonts/acaslonpro-italic-webfont.woff') format('woff'),
+         url('../fonts/acaslonpro-italic.otf') format('opentype');
+    font-style: italic;
+    font-weight: 400;
+}
+@font-face {
+    font-family: 'AdobeCaslonPro';
+    src: url('../fonts/acaslonpro-semibold-webfont.woff2') format('woff2'),
+         url('../fonts/acaslonpro-semibold-webfont.woff') format('woff'),
+         url('../fonts/acaslonpro-semibold.otf') format('opentype');
+    font-style: normal;
+    font-weight: 600;
+}
+@font-face {
+    font-family: 'AdobeCaslonPro';
+    src: url('../fonts/acaslonpro-semibolditalic-webfont.woff2') format('woff2'),
+         url('../fonts/acaslonpro-semibolditalic-webfont.woff') format('woff'),
+         url('../fonts/acaslonpro-semibolditalic.otf') format('opentype');
+    font-style: italic;
+    font-weight: 600;
+}
+@font-face {
+    font-family: 'AdobeCaslonPro';
+    src: url('../fonts/acaslonpro-semibold-webfont.woff2') format('woff2'),
+         url('../fonts/acaslonpro-semibold-webfont.woff') format('woff'),
+         url('../fonts/acaslonpro-semibold.otf') format('opentype');
+    font-style: normal;
+    font-weight: 600;
+}
+@font-face {
+    font-family: 'AdobeCaslonPro';
+    src: url('../fonts/acaslonpro-semibolditalic-webfont.woff2') format('woff2'),
+         url('../fonts/acaslonpro-semibolditalic-webfont.woff') format('woff'),
+         url('../fonts/acaslonpro-semibolditalic.otf') format('opentype');
+    font-style: italic;
+    font-weight: 600;
+}
+@font-face {
+    font-family: 'AdobeCaslonPro';
+    src: url('../fonts/acaslonpro-bold-webfont.woff2') format('woff2'),
+         url('../fonts/acaslonpro-bold-webfont.woff') format('woff'),
+         url('../fonts/acaslonpro-bold.otf') format('opentype');
+    font-style: normal;
+    font-weight: 700;
+}
+@font-face {
+    font-family: 'AdobeCaslonPro';
+    src: url('../fonts/acaslonpro-bolditalic-webfont.woff2') format('woff2'),
+         url('../fonts/acaslonpro-bolditalic-webfont.woff') format('woff'),
+         url('../fonts/acaslonpro-bolditalic.otf') format('opentype');
+    font-style: italic;
+    font-weight: 700;
+}
+/* Gabriela Stencil Bold*/
+@font-face {
+    font-family: 'GabrielaStencil';
+    src: url('../fonts/gabrielastencil-bold-webfont.woff2') format('woff2'),
+         url('../fonts/gabrielastencil-bold-webfont.woff') format('woff'),
+         url('../fonts/gabrielastencil-bold.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'GabrielaStencil';
+    src: url('../fonts/gabrielastencil-boldit-webfont.woff2') format('woff2'),
+         url('../fonts/gabrielastencil-boldit-webfont.woff') format('woff'),
+         url('../fonts/gabrielastencil-boldit.otf') format('opentype');
+    font-weight: normal;
+    font-style: italic;
 }
 /***** End Typography *****/
 
@@ -66,6 +133,9 @@ Yellow, Light: #fff7ef;
 /***** Global Styles *****/
 body {
 	font-size: 16px;
+}
+.body_font {
+	font-family: 'AdobeCaslonPro', 'Big Caslon', Garamond, serif !important;
 }
 ul,
 ol {
@@ -98,7 +168,7 @@ cite {
 
 /***** Headings *****/
 h1.heading_font {
-	font-family: GabrielaStencil-Bold !important;
+	font-family: 'GabrielaStencil', Cambria, Georgia, Palatino, serif !important;
 	font-weight: normal !important;
 	font-style: normal;
 	text-align: center;
@@ -110,7 +180,7 @@ h1.heading_font {
 h3.heading_font {
 	border-top: 1px solid #231f20;
 	border-bottom: 1px solid #231f20;
-	font-family: GabrielaStencil-Bold !important;
+	font-family: 'GabrielaStencil', Cambria, Georgia, Palatino, serif !important;
 	font-weight: normal;
 	font-style: normal;
 	font-size: 28.75pt;
@@ -124,16 +194,16 @@ h3.heading_font {
 }
 /* use h4 for chapter sub-section headings */
 h4.heading_font {
-	font-family: 'adobe-caslon-pro', Georgia, serif !important;
+	font-family: 'AdobeCaslonPro', 'Big Caslon', Garamond, serif !important;
 	font-size: 135%;
-	font-weight: bold;
+	font-weight: 700;
 	line-height: 1.2;
 	padding-right: 0;
 	padding-left: 0;
 }
 h6.heading_font {
-	font-family: 'adobe-caslon-pro', Georgia, serif !important;
-	font-weight: normal;
+	font-family: 'AdobeCaslonPro', 'Big Caslon', Garamond, serif !important;
+	font-weight: 400;
 	font-size: 16.33pt;
 	line-height: 1.2;
 	margin-top: -1.2rem;
@@ -155,15 +225,15 @@ h6.heading_font {
 	background-color: #231f20;
 }
 #mainMenuInside h2 {
-	font-family: 'adobe-caslon-pro', Georgia, serif !important;
+	font-family: 'AdobeCaslonPro', 'Big Caslon', Garamond, serif !important;
 	font-size: 21pt !important;
 	font-style: normal !important;
-	font-weight: 800 !important;
+	font-weight: 700 !important;
 	margin-bottom: 1.2rem !important;
 	padding-left: 3.8rem !important;
 }
 #mainMenuSubmenus h2.title {
-	font-family: 'adobe-caslon-pro', Georgia, serif !important;
+	font-family: 'AdobeCaslonPro', 'Big Caslon', Garamond, serif !important;
 	font-size: 16pt !important;
 	font-style: normal !important;
 	font-weight: 600 !important;
@@ -225,7 +295,7 @@ h1.home__title {
 	align-items: center;
 	justify-content: center;
 	flex-direction: column;
-	font-family: 'GabrielaStencil-Bold';
+	font-family: 'GabrielaStencil', Cambria, Georgia, Palatino, serif;
 	font-size: 17rem;
 	font-weight: normal;
 	height: 90%;
@@ -365,7 +435,7 @@ h6.home__byline {
 	padding: 0;
 }
 .toc__lead h2 {
-	font-family: 'GabrielaStencil-Bold' !important;
+	font-family: 'GabrielaStencil', Cambria, Georgia, Palatino, serif !important;
 	font-size: 7rem;
 	font-weight: normal;
 	line-height: 1.5;
@@ -393,7 +463,7 @@ h6.home__byline {
 	right: 31%;
 }
 .toc__lead h5 {
-	font-family: 'adobe-caslon-pro', Georgia, serif !important;
+	font-family: 'AdobeCaslonPro', 'Big Caslon', Garamond, serif !important;
 	font-weight: 400;
 	letter-spacing: .05em;
 	line-height: 2;
@@ -508,7 +578,7 @@ h6.home__byline {
 	width: 12rem;
 }
 .toc__chapter__num {
-	font-family: 'GabrielaStencil-Bold' !important;
+	font-family: 'GabrielaStencil', Cambria, Georgia, Palatino, serif !important;
 	font-weight: normal !important;
 	margin: 0 !important;
 }
@@ -533,7 +603,7 @@ h6.home__byline {
 h3.toc__chapter__title {
 	border: none;
 	box-sizing: border-box;
-	font-family: 'GabrielaStencil-Bold' !important;
+	font-family: 'GabrielaStencil', Cambria, Georgia, Palatino, serif !important;
 	font-weight: normal !important;
 	font-size: 30pt !important;
 	line-height: 1.2;
@@ -936,8 +1006,9 @@ article #home__simulations h5 {
 
 /***** Section Hero / Header *****/
 .caption_font {
-	font-family: 'adobe-caslon-pro', Georgia, serif !important;
+	font-family: 'AdobeCaslonPro', 'Big Caslon', Garamond, serif !important;
 	font-size: 106%;
+	font-weight: 400;
 }
 
 div.media_description.pane {
@@ -945,8 +1016,8 @@ div.media_description.pane {
 }
 
 .path-breadcrumb {
-	font-family: 'adobe-caslon-pro', Georgia, serif !important;
-	font-weight: bold;
+	font-family: 'AdobeCaslonPro', 'Big Caslon', Garamond, serif !important;
+	font-weight: 700;
 	text-align: center;
 	font-size: 12.25pt;
 	letter-spacing: 2px;
@@ -982,9 +1053,10 @@ div.media_description.pane {
 	min-height: 526px;
 }
 div.description {
-	font-family: 'adobe-caslon-pro', Georgia, serif !important;
+	font-family: 'AdobeCaslonPro', 'Big Caslon', Garamond, serif !important;
 	font-size: 19.25pt;
 	font-style: normal !important;
+	font-weight: 400;
 	text-align: center;
 	padding-top: 1.75em;
 }
@@ -1348,10 +1420,10 @@ blockquote {
 	border-bottom: 1px solid #b35f0c;
 	border-left: none;
 	color: #231f20;
-	font-family: 'adobe-caslon-pro', Georgia, serif;
+	font-family: 'AdobeCaslonPro', 'Big Caslon', Garamond, serif;
 	font-size: 2.1rem;
 	font-style: normal;
-	font-weight: normal;
+	font-weight: 400;
 	line-height: 1.5;
 	margin: 5rem 8rem;
 	padding: 3rem 1rem 2rem 1rem;
@@ -1389,7 +1461,7 @@ button.translate {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	font-family: 'adobe-caslon-pro', Georgia, serif !important;
+	font-family: 'AdobeCaslonPro', 'Big Caslon', Garamond, serif !important;
 	font-size: 1.6rem;
 	font-style: normal;
 	font-weight: 600;
@@ -1517,10 +1589,10 @@ div.note_viewer .note-text {
 a.texteo_icon.texteo_icon_note {
 	background-image: none !important;
 	color: #A85A0C;
-	font-family: 'adobe-caslon-pro', Georgia, serif !important;
+	font-family: 'AdobeCaslonPro', 'Big Caslon', Garamond, serif !important;
 	font-size: 70% !important;
 	font-style: normal !important;
-	font-weight: 800 !important;
+	font-weight: 700 !important;
 	padding-left: 0;}
 .footnotes {
 	text-align: left;}
@@ -1544,7 +1616,7 @@ a.texteo_icon.texteo_icon_note {
 .caption-wrapper {
 	border-bottom: 1px solid #b35f0c;
 	color: #666;
-	font-family: 'adobe-caslon-pro', Georgia, serif;
+	font-family: 'AdobeCaslonPro', 'Big Caslon', Garamond, serif;
 	font-size: 1.7rem;
 	font-style: normal;
 	font-weight: 400;
@@ -1562,7 +1634,7 @@ button.caption__button {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	font-family: 'adobe-caslon-pro', Georgia, serif;
+	font-family: 'AdobeCaslonPro', 'Big Caslon', Garamond, serif;
 	font-size: 1.6rem;
 	font-style: normal;
 	font-weight: 600;
@@ -1779,8 +1851,9 @@ body.parent-simulations section.relationships p.container a.continue_btn.nav_btn
 a.further-insights {
 	background-color: transparent !important;
 	color: #fcbd7a !important;
-	font-family: 'adobe-caslon-pro' !important;
+	font-family: 'AdobeCaslonPro', 'Big Caslon', Garamond, serif !important;
 	font-size: 2.1rem !important;
+	font-weight: 400;
 }
 .deep-dive__navigation h5 a,
 #colophon a,
